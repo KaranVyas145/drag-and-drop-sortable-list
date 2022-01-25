@@ -34,7 +34,7 @@ function createList() {
         <span class="number">${index + 1}</span>
         <div class="draggable" draggable="true">
         <p class="person-name">${person}</p>
-        <i class="fas fa-grip-lines">icon</i>
+        <i class="fas fa-grip-lines"></i>
         </div>
         `;
 
@@ -46,36 +46,49 @@ function createList() {
 }
 
 function dragStart() {
-//   console.log("event: ", "dragstart");
-dragStartIndex=+this.closest('li').getAttribute('data-index');
-
+  //   console.log("event: ", "dragstart");
+  dragStartIndex = +this.closest("li").getAttribute("data-index");
 }
 function dragOver(e) {
-    e.preventDefault();
-//   console.log("event: ", "dragover");
+  e.preventDefault();
+  //   console.log("event: ", "dragover");
 }
 
 function dragDrop() {
-//   console.log("event: ", "drop");
-const dragEndIndex= +this.getAttribute('data-index');
-swapItems(dragStartIndex,dragEndIndex);
-this.classList.remove('over');
+  //   console.log("event: ", "drop");
+  const dragEndIndex = +this.getAttribute("data-index");
+  swapItems(dragStartIndex, dragEndIndex);
+  this.classList.remove("over");
 }
 
-function swapItems(from,to){
-    const itemOne=listItems[from].querySelector('.draggable');
-    const itemTwo=listItems[to].querySelector('.draggable');
-    listItems[from].appendChild(itemTwo);
-    listItems[to].appendChild(itemOne);
+// Swap list items that are dragged and dropped
+function swapItems(from, to) {
+  const itemOne = listItems[from].querySelector(".draggable");
+  const itemTwo = listItems[to].querySelector(".draggable");
+  listItems[from].appendChild(itemTwo);
+  listItems[to].appendChild(itemOne);
 }
 function dragEnter() {
-//   console.log("event: ", "dragenter");
-    this.classList.add('over');
+  //   console.log("event: ", "dragenter");
+  this.classList.add("over");
 }
 
 function dragLeave() {
-//   console.log("event: ", "dragleave");
-this.classList.remove('over');
+  //   console.log("event: ", "dragleave");
+  this.classList.remove("over");
+}
+
+// Check the order of list items
+function checkOrder() {
+  listItems.forEach((listItem, index) => {
+    const personName = listItem.querySelector(".draggable").innerText.trim();
+    if (personName !== richestPeople[index]) {
+      listItem.classList.add("wrong");
+    } else {
+      listItem.classList.remove("wrong");
+      listItem.classList.add("right");
+    }
+  });
 }
 
 function addEventListeners() {
@@ -93,3 +106,5 @@ function addEventListeners() {
     item.addEventListener("dragleave", dragLeave);
   });
 }
+
+check.addEventListener("click", checkOrder);
